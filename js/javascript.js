@@ -1,16 +1,28 @@
 "use strict";
 
-const gameBoard = (function () {
-    const gameBoardArray = [".", ".", ".", ".", ".", ".", ".", ".", "."];
+const gameBoardObj = (function () {
+    const gameBoardArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];  // Dummy data
     return {gameBoardArray};
 })();
 
 const gameController = (function () {
-    return {};
+    const getGameBoardArray = function (gameBoardObj) {
+        return gameBoardObj.gameBoardArray;
+    }
+    return {getGameBoardArray};
 })();
 
 const displayController = (function () {
-    return {};
+    const updateDisplay = function () {
+        const gameBoardArray = gameController.getGameBoardArray(gameBoardObj);
+        gameBoardArray.forEach(squareValue => {
+            const currentSquareIndex = gameBoardArray.indexOf(squareValue);
+            const currentSquareDisplay = document.querySelector(`span[data-square="${currentSquareIndex}"]`);
+            currentSquareDisplay.setAttribute("data-value", squareValue);
+            currentSquareDisplay.textContent = squareValue;
+        });
+    }
+    return {updateDisplay};
 })();
 
 function playerFactory(playerName) {
@@ -19,3 +31,4 @@ function playerFactory(playerName) {
 
 const playerOne = playerFactory("playerOne");
 const playerTwo = playerFactory("playerTwo");
+
