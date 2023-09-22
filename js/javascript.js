@@ -17,7 +17,7 @@ const displayController = (function () {
         const gameBoardArray = gameController.getGameBoardArray(gameBoardObj);
         gameBoardArray.forEach(squareValue => {
             const currentSquareIndex = gameBoardArray.indexOf(squareValue);
-            const currentSquareDisplay = document.querySelector(`span[data-square="${currentSquareIndex}"]`);
+            const currentSquareDisplay = document.querySelector(`div[data-square="${currentSquareIndex}"]`);
             currentSquareDisplay.setAttribute("data-value", squareValue);
             currentSquareDisplay.textContent = squareValue;
         });
