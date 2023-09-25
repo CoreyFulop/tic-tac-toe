@@ -17,7 +17,12 @@ const gameBoardObj = (function () {
     const getGameBoardArray = function () {
         return gameBoardArray;
     }
-    return {gameBoardArray, setUpGameBoard, getGameBoardArray};
+    const resetGameBoardArray = function () {
+        for(let i = 0; i < gameBoardArray.length; i++) {
+            gameBoardArray[i] = "";
+        }
+    }
+    return {gameBoardArray, setUpGameBoard, getGameBoardArray, resetGameBoardArray};
 })();
 
 const gameController = (function () {
@@ -33,7 +38,10 @@ const gameController = (function () {
         return player;
     }
     const newGame = function () {
-        const {setUpGameBoard} = gameBoardObj;
+        let {gameBoardArray, setUpGameBoard, resetGameBoardArray} = gameBoardObj;
+        let {updateDisplay} = displayController;
+        resetGameBoardArray();
+        updateDisplay();
         setUpGameBoard();
     }
     const newGameBtn = document.getElementById("new-game");
