@@ -3,7 +3,7 @@
 const gameBoardObj = (function () {
     const setUpGameBoard = function () {
         const squares = Array.from(document.querySelectorAll(".game-square"));
-        squares.forEach(square => square.addEventListener("click", getPlayerMove), {once: true});
+        squares.forEach(square => square.addEventListener("click", getPlayerMove, {once: true}));
     }
     const getPlayerMove = function (e) {
         const {updateDisplay} = displayController;
