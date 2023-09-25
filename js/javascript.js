@@ -6,10 +6,12 @@ const gameBoardObj = (function () {
         squares.forEach(square => square.addEventListener("click", getPlayerMove), {once: true});
     }
     const getPlayerMove = function (e) {
+        const {updateDisplay} = displayController;
         const squareTarget = e.target.getAttribute("data-square");
         const {getCurrentPlayer} = gameController;
         const currentPlayer = getCurrentPlayer();
         gameBoardArray[squareTarget] = currentPlayer.symbol;
+        updateDisplay();
     }
     const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
     const getGameBoardArray = function () {
@@ -30,7 +32,13 @@ const gameController = (function () {
         move++;
         return player;
     }
-    return {getCurrentPlayer};
+    const newGame = function () {
+        const {setUpGameBoard} = gameBoardObj;
+        setUpGameBoard();
+    }
+    const newGameBtn = document.getElementById("new-game");
+    newGameBtn.addEventListener("click", newGame);
+    return {getCurrentPlayer, newGame};
 })();
 
 const displayController = (function () {
