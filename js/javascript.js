@@ -25,10 +25,10 @@ const displayController = (function () {
     return {updateDisplay};
 })();
 
-function playerFactory(playerName) {
-    return {playerName};
+function playerFactory(playerName, symbol) {
+    return {playerName, symbol};
 }
 
-const playerOne = playerFactory("playerOne");
-const playerTwo = playerFactory("playerTwo");
+const playerOne = playerFactory("playerOne", "X");
+const playerTwo = playerFactory("playerTwo", "O");
 
