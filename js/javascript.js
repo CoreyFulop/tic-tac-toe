@@ -11,6 +11,11 @@ const gameBoardObj = (function () {
         const {getCurrentPlayer} = gameController;
         const currentPlayer = getCurrentPlayer();
         gameBoardArray[squareTarget] = currentPlayer.symbol;
+        if (currentPlayer.symbol == "X") {
+            e.target.classList.add("crosses");
+        } else {
+            e.target.classList.add("noughts");
+        }
         updateDisplay();
     }
     const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
@@ -39,9 +44,10 @@ const gameController = (function () {
     }
     const newGame = function () {
         let {gameBoardArray, setUpGameBoard, resetGameBoardArray} = gameBoardObj;
-        let {updateDisplay} = displayController;
+        let {updateDisplay, clearBackground} = displayController;
         resetGameBoardArray();
         updateDisplay();
+        clearBackground();
         setUpGameBoard();
     }
     const newGameBtn = document.getElementById("new-game");
@@ -50,6 +56,11 @@ const gameController = (function () {
 })();
 
 const displayController = (function () {
+    const clearBackground = function () {
+        const squares = Array.from(document.querySelectorAll(".game-square"));
+        squares.forEach(square => square.classList.remove("noughts"));
+        squares.forEach(square => square.classList.remove("crosses"));
+    }
     const updateDisplay = function () {
         const {getGameBoardArray} = gameBoardObj;
         const gameBoard = getGameBoardArray();
@@ -58,7 +69,7 @@ const displayController = (function () {
             currentSquare.textContent = gameBoard[i];
         }
     }
-    return {updateDisplay};
+    return {updateDisplay, clearBackground};
 })();
 
 function playerFactory(playerName, symbol) {
