@@ -1,26 +1,46 @@
 "use strict";
 
 const gameBoardObj = (function () {
-    const gameBoardArray = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];  // Dummy data
-    return {gameBoardArray};
+    const setUpGameBoard = function () {
+        const squares = Array.from(document.querySelectorAll(".game-square"));
+        squares.forEach(square => square.addEventListener("click", getPlayerMove), {once: true});
+    }
+    const getPlayerMove = function (e) {
+        const squareTarget = e.target.getAttribute("data-square");
+        const {getCurrentPlayer} = gameController;
+        const currentPlayer = getCurrentPlayer();
+        gameBoardArray[squareTarget] = currentPlayer.symbol;
+    }
+    const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
+    const getGameBoardArray = function () {
+        return gameBoardArray;
+    }
+    return {gameBoardArray, setUpGameBoard, getGameBoardArray};
 })();
 
 const gameController = (function () {
-    const getGameBoardArray = function (gameBoardObj) {
-        return gameBoardObj.gameBoardArray;
+    let move = 1;
+    const getCurrentPlayer = function () {
+        let player;
+        if (move%2 == 0) {
+            player = playerTwo;
+        } else {
+            player = playerOne;
+        }
+        move++;
+        return player;
     }
-    return {getGameBoardArray};
+    return {getCurrentPlayer};
 })();
 
 const displayController = (function () {
     const updateDisplay = function () {
-        const gameBoardArray = gameController.getGameBoardArray(gameBoardObj);
-        gameBoardArray.forEach(squareValue => {
-            const currentSquareIndex = gameBoardArray.indexOf(squareValue);
-            const currentSquareDisplay = document.querySelector(`div[data-square="${currentSquareIndex}"]`);
-            currentSquareDisplay.setAttribute("data-value", squareValue);
-            currentSquareDisplay.textContent = squareValue;
-        });
+        const {getGameBoardArray} = gameBoardObj;
+        const gameBoard = getGameBoardArray();
+        for (let i = 0; i < gameBoard.length; i++) {
+            let currentSquare = document.querySelector(`div[data-square="${i}"]`);
+            currentSquare.textContent = gameBoard[i];
+        }
     }
     return {updateDisplay};
 })();
