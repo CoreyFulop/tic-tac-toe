@@ -8,7 +8,7 @@ const gameBoardObj = (function () {
     const getPlayerMove = function (e) {
         const {updateDisplay} = displayController;
         const squareTarget = e.target.getAttribute("data-square");
-        const {getCurrentPlayer} = gameController;
+        const {getCurrentPlayer, checkPlayerWin, checkTie} = gameController;
         const currentPlayer = getCurrentPlayer();
         gameBoardArray[squareTarget] = currentPlayer.symbol;
         if (currentPlayer.symbol == "X") {
@@ -17,6 +17,8 @@ const gameBoardObj = (function () {
             e.target.classList.add("noughts");
         }
         updateDisplay();
+        checkPlayerWin(currentPlayer);
+        checkTie();
     }
     const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
     const getGameBoardArray = function () {
@@ -27,10 +29,11 @@ const gameBoardObj = (function () {
             gameBoardArray[i] = "";
         }
     }
-    return {gameBoardArray, setUpGameBoard, getGameBoardArray, resetGameBoardArray};
+    return {gameBoardArray, setUpGameBoard, getGameBoardArray, resetGameBoardArray, getPlayerMove};
 })();
 
 const gameController = (function () {
+    let messageContainer = document.querySelector(".message-container");
     let move = 1;
     const getCurrentPlayer = function () {
         let player;
@@ -43,16 +46,60 @@ const gameController = (function () {
         return player;
     }
     const newGame = function () {
+        move = 1;
         let {gameBoardArray, setUpGameBoard, resetGameBoardArray} = gameBoardObj;
         let {updateDisplay, clearBackground} = displayController;
         resetGameBoardArray();
         updateDisplay();
         clearBackground();
         setUpGameBoard();
+        messageContainer.textContent = "";
+    }
+    const disableFurtherMoves = function () {
+        const {getPlayerMove} = gameBoardObj;
+        const squares = Array.from(document.querySelectorAll(".game-square"));
+        squares.forEach(square => square.removeEventListener("click", getPlayerMove));
+    }
+    const checkPlayerWin = function (currentPlayer) {
+        const playerSymbol = currentPlayer.symbol;
+        const {gameBoardArray} = gameBoardObj;
+        if (gameBoardArray[0] == playerSymbol && gameBoardArray[1] == playerSymbol && gameBoardArray[2] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[3] == playerSymbol && gameBoardArray[4] == playerSymbol && gameBoardArray[5] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[6] == playerSymbol && gameBoardArray[7] == playerSymbol && gameBoardArray[8] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[0] == playerSymbol && gameBoardArray[3] == playerSymbol && gameBoardArray[6] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[1] == playerSymbol && gameBoardArray[4] == playerSymbol && gameBoardArray[7] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[2] == playerSymbol && gameBoardArray[5] == playerSymbol && gameBoardArray[8] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[0] == playerSymbol && gameBoardArray[4] == playerSymbol && gameBoardArray[8] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } else if (gameBoardArray[2] == playerSymbol && gameBoardArray[4] == playerSymbol && gameBoardArray[6] == playerSymbol) {
+            messageContainer.textContent = `${currentPlayer.playerName} wins`;
+            disableFurtherMoves();
+        } 
+    }
+    const checkTie = function () {
+        const {gameBoardArray} = gameBoardObj;
+        if (gameBoardArray[0] != "" && gameBoardArray[1] != "" && gameBoardArray[2] != "" && 
+            gameBoardArray[3] != "" && gameBoardArray[4] != "" && gameBoardArray[5] != "" && 
+            gameBoardArray[6] != "" && gameBoardArray[7] != "" && gameBoardArray[8] != "") {
+                messageContainer.textContent = `Tie`;
+            }
     }
     const newGameBtn = document.getElementById("new-game");
     newGameBtn.addEventListener("click", newGame);
-    return {getCurrentPlayer, newGame};
+    return {getCurrentPlayer, newGame, checkPlayerWin, checkTie};
 })();
 
 const displayController = (function () {
@@ -76,6 +123,6 @@ function playerFactory(playerName, symbol) {
     return {playerName, symbol};
 }
 
-const playerOne = playerFactory("playerOne", "X");
-const playerTwo = playerFactory("playerTwo", "O");
+const playerOne = playerFactory("Player One", "X");
+const playerTwo = playerFactory("Player Two", "O");
 
