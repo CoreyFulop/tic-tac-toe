@@ -8,7 +8,7 @@ const gameBoardObj = (function () {
     const getPlayerMove = function (e) {
         const {updateDisplay} = displayController;
         const squareTarget = e.target.getAttribute("data-square");
-        const {getCurrentPlayer, checkPlayerWin, checkTie} = gameController;
+        const {getCurrentPlayer, checkPlayerWin} = gameController;
         const currentPlayer = getCurrentPlayer();
         gameBoardArray[squareTarget] = currentPlayer.symbol;
         if (currentPlayer.symbol == "X") {
@@ -18,7 +18,6 @@ const gameBoardObj = (function () {
         }
         updateDisplay();
         checkPlayerWin(currentPlayer);
-        checkTie();
     }
     const gameBoardArray = ["", "", "", "", "", "", "", "", ""];
     const getGameBoardArray = function () {
@@ -87,19 +86,15 @@ const gameController = (function () {
         } else if (gameBoardArray[2] == playerSymbol && gameBoardArray[4] == playerSymbol && gameBoardArray[6] == playerSymbol) {
             messageContainer.textContent = `${currentPlayer.playerName} wins`;
             disableFurtherMoves();
-        } 
-    }
-    const checkTie = function () {
-        const {gameBoardArray} = gameBoardObj;
-        if (gameBoardArray[0] != "" && gameBoardArray[1] != "" && gameBoardArray[2] != "" && 
-            gameBoardArray[3] != "" && gameBoardArray[4] != "" && gameBoardArray[5] != "" && 
-            gameBoardArray[6] != "" && gameBoardArray[7] != "" && gameBoardArray[8] != "") {
-                messageContainer.textContent = `Tie`;
-            }
+        } else if (gameBoardArray[0] != "" && gameBoardArray[1] != "" && gameBoardArray[2] != "" && 
+                    gameBoardArray[3] != "" && gameBoardArray[4] != "" && gameBoardArray[5] != "" && 
+                    gameBoardArray[6] != "" && gameBoardArray[7] != "" && gameBoardArray[8] != "") {
+                        messageContainer.textContent = `Tie`;
+        }
     }
     const newGameBtn = document.getElementById("new-game");
     newGameBtn.addEventListener("click", newGame);
-    return {getCurrentPlayer, newGame, checkPlayerWin, checkTie};
+    return {getCurrentPlayer, newGame, checkPlayerWin};
 })();
 
 const displayController = (function () {
